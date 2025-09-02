@@ -15,7 +15,7 @@ Future<void> main() async {
     return;
   }
 
-  final outputDirectory = ensureOutputDirectory()..createSync(recursive: true);
+  final outputDirectory = ensureOutputDirectory();
   cleanExistingBundles(outputDirectory);
 
   final brickDirectories = findBrickDirectories(bricksRoot);
