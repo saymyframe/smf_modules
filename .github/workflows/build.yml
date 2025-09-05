@@ -31,13 +31,17 @@ jobs:
       - name: Add pub-cache bin to PATH
         run: echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
 
+      # Ensure smf_contracts path exists for dependency_overrides
+      - name: Fetch smf_contracts
+        run: git clone https://github.com/saymyframe/smf_contracts ../smf_contracts
+
       # Bootstrap the monorepo
       - name: Bootstrap monorepo
         run: melos bootstrap
 
       # Install coverage tool
-      - name: Install coverage tool
-        run: dart pub global activate coverage
+      # - name: Install coverage tool
+      #   run: dart pub global activate coverage
 
       # Generate coverage for all modules
       # - name: Run tests with coverage (smf_contribution_engine)
