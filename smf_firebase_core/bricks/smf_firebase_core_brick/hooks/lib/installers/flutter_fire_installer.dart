@@ -15,7 +15,7 @@ class FlutterFireInstaller implements Installer {
   Future<bool> checkInstallation() async {
     final progress = _logger.progress('Checking flutterfire_cli installed');
     try {
-      await CommandRunner.run('flutterfire', ['--help'], logger: _logger, runInShell: true);
+      await CommandRunner.run('flutterfire', ['--help'], logger: _logger);
       progress.complete('flutterfire_cli installed');
       return true;
     } on Exception catch (_) {
@@ -32,7 +32,6 @@ class FlutterFireInstaller implements Installer {
         'dart',
         ['pub', 'global', 'activate', 'flutterfire_cli'],
         logger: _logger,
-        runInShell: true,
       );
       progress.complete('flutterfire_cli installed');
       return true;
@@ -78,7 +77,6 @@ class FlutterFireInstaller implements Installer {
         ['configure', '--platforms=ios,android'],
         logger: _logger,
         workingDirectory: workingDirectory,
-        runInShell: true,
       );
       return true;
     } on Exception catch (_) {
