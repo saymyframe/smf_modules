@@ -17,11 +17,12 @@ class FirebaseCliInstaller implements Installer {
   Future<bool> checkInstallation() async {
     final progress = _logger.progress('Checking firebase cli installed');
     try {
-      await CommandRunner.run('firebase', ['--help'], logger: _logger);
+      await CommandRunner.run('firebase', ['--help'], logger: _logger, runInShell: true);
       progress.complete('firebase cli installed');
       return true;
-    } on Exception catch (_) {
-      progress.fail("❌ firebase cli isn't installed");
+    } on Exception catch (e) {
+      print('$e');
+      progress.fail("firebase cli isn't installed");
       return false;
     }
   }
@@ -39,10 +40,7 @@ class FirebaseCliInstaller implements Installer {
       } else if (Platform.isWindows) {
         await CommandRunner.run(
           'powershell',
-          [
-            '-Command',
-            'Invoke-WebRequest -Uri https://firebase.tools -UseBasicParsing | Invoke-Expression'
-          ],
+          ['-Command', 'Invoke-WebRequest -Uri https://firebase.tools -UseBasicParsing | Invoke-Expression'],
           logger: _logger,
         );
       } else {
@@ -51,8 +49,11 @@ class FirebaseCliInstaller implements Installer {
 
       progress.complete('firebase cli installed');
       return true;
-    } on Exception catch (_) {
-      progress.fail('❌ something went wrong');
+    } on Exception catch (e, s) {
+      progress.fail('something went wrong');
+      _logger.delayed(e.toString());
+      _logger.delayed('\n');
+      _logger.delayed(s.toString());
       return false;
     }
   }
@@ -60,7 +61,7 @@ class FirebaseCliInstaller implements Installer {
   @override
   Future<bool> configure({required String workingDirectory}) async {
     try {
-      await CommandRunner.start('firebase', ['login'], logger: _logger);
+      await CommandRunner.start('firebase', ['login'], logger: _logger, runInShell: true);
       return true;
     } on Exception catch (_) {
       return false;
