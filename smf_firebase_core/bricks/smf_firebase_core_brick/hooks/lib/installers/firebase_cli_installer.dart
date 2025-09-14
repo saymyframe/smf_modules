@@ -17,8 +17,8 @@ class FirebaseCliInstaller implements Installer {
   String get name => 'Firebase CLI';
 
   @override
-  Future<bool> checkInstallation() async {
-    final progress = _logger.progress('Checking firebase cli installed');
+  Future<bool> checkInstallation([Progress? p]) async {
+    final progress = p ?? _logger.progress('Checking firebase cli installed');
     try {
       await CommandRunner.run('firebase', ['--help'], logger: _logger);
       progress.complete('firebase cli installed');
@@ -42,13 +42,13 @@ class FirebaseCliInstaller implements Installer {
       // Primary install via embedded scripts with realtime output
       if (Platform.isMacOS) {
         final file = await _writeTempAsset('install_firebase_macos.sh');
-        await CommandRunner.start('bash', [file.path], logger: _logger);
+        await CommandRunner.run('bash', [file.path], logger: _logger);
       } else if (Platform.isLinux) {
         final file = await _writeTempAsset('install_firebase_linux.sh');
-        await CommandRunner.start('bash', [file.path], logger: _logger);
+        await CommandRunner.run('bash', [file.path], logger: _logger);
       } else if (Platform.isWindows) {
         final file = await _writeTempAsset('install_firebase_windows.ps1');
-        await CommandRunner.start(
+        await CommandRunner.run(
           'powershell',
           [
             '-ExecutionPolicy',
@@ -65,7 +65,7 @@ class FirebaseCliInstaller implements Installer {
       }
 
       // Verify installation
-      return checkInstallation();
+      return checkInstallation(progress);
     } catch (e, s) {
       // Fallback only for macOS/Linux
       if (!(Platform.isMacOS || Platform.isLinux)) {
@@ -146,7 +146,7 @@ class FirebaseCliInstaller implements Installer {
         logger: _logger,
       );
 
-      return checkInstallation();
+      return checkInstallation(progress);
     } catch (e, s) {
       progress.fail('fallback installation failed');
 
