@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> **This repository has moved.** `smf_modules` now lives in the [smf_flutter_cli monorepo](https://github.com/saymyframe/smf_flutter_cli/tree/main/packages/smf_modules) with its full history. Please open issues and pull requests there. This repository is archived and read-only.
+
 # smf_modules
 
 Collection of first‑party SMF modules for Flutter (routing, DI, Firebase, analytics, event bus, example features).
